@@ -2,7 +2,9 @@
 
 class UsersController < ApplicationController
   def new
+    byebug
     @user = User.new
+    @gender_options = User.genders_i18n.invert.map{ |key, value| [key, value] }
   end
 
   def create
@@ -17,6 +19,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:email, :name, :password, :password_confirmation)
+    params.require(:user).permit(:email, :name, :password, :password_confirmation, :gender)
   end
 end
