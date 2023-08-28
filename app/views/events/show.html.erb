@@ -9,6 +9,9 @@
                 <span class="badge bg-secondary">
                   <%= l @event.held_at.to_date, format: :short %>
                 </span>
+                <% if @event&.woman_only? %>
+                  <span class="badge bg-secondary">女性限定</span>
+                <% end %>
               </h5>
             </div>
             <h1>
@@ -92,13 +95,15 @@
                               method: :delete,
                               data: { confirm: 'キャンセルします' }
                   %>
-                <% else %>
-                  <%= link_to 'このもくもく会に参加する',
-                              event_attendance_url(@event),
-                              class: 'btn btn-primary',
-                              method: :post,
-                              data: { confirm: '申し込みます' }
-                  %>
+                <% else %> 
+                  <% unless @event.only_woman && !current_user.woman? %>
+                    <%= link_to 'このもくもく会に参加する',
+                                event_attendance_url(@event),
+                                class: 'btn btn-primary',
+                                method: :post,
+                                data: { confirm: '申し込みます' }
+                    %>
+                  <% end %>
                 <% end %>
               <% end %>
             <% end %>
@@ -111,9 +116,9 @@
           参加者（<%= @event.attendees.size %>人）
         </div>
         <div class="card-body">
-           <ul class="list-unstyled">
-             <%= render partial: 'events/attendee', collection: @event.attendees %>
-           </ul>
+          <ul class="list-unstyled">
+            <%= render partial: 'events/attendee', collection: @event.attendees %>
+          </ul>
         </div>
       </div>
 
