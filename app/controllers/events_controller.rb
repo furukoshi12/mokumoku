@@ -29,9 +29,7 @@ class EventsController < ApplicationController
 
   def create
     @event = current_user.events.build(event_params)
-    if current_user.woman? && params[:event][:only_woman] == "1"
-      @event.only_woman = true
-    end
+    @event.set_woman_only(current_user, params)
     
     if @event.save
       User.all.find_each do |user|

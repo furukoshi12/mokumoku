@@ -41,4 +41,10 @@ class Event < ApplicationRecord
   def woman_only_event_for_man?(user)
     woman_only? && !user.woman?
   end
+
+  def set_woman_only(user, params)
+    if user.woman? && params[:event][:only_woman] == Constants::ONLY_WOMAN_FLAG
+      self.only_woman = true
+    end
+  end
 end
