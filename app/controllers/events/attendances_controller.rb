@@ -4,7 +4,7 @@ class Events::AttendancesController < ApplicationController
   def create
     @event = Event.find(params[:event_id])
 
-    if @event.only_woman? && !current_user.woman?
+    if @event.woman_only_event_for_man?(current_user)
       redirect_back(fallback_location: root_path, alert: '女性限定イベントです')
       return
     end

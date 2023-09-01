@@ -37,4 +37,8 @@ class Event < ApplicationRecord
     return true unless woman_only?
     user&.woman?
   end
+
+  def woman_only_event_for_man?(user)
+    woman_only? && !user.woman?
+  end
 end
