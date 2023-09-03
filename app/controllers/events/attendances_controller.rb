@@ -3,6 +3,12 @@
 class Events::AttendancesController < ApplicationController
   def create
     @event = Event.find(params[:event_id])
+
+    if @event.woman_only_event_for_man?(current_user)
+      redirect_back(fallback_location: root_path, alert: '女性限定イベントです')
+      return
+    end
+    
     event_attendance = current_user.attend(@event)
     (@event.attendees - [current_user] + [@event.user]).uniq.each do |user|
       NotificationFacade.attended_to_event(event_attendance, user)
